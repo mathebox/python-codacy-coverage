@@ -8,6 +8,7 @@ dependencies:
     - sudo pip install pyflakes
     - sudo pip install coverage
     - sudo pip install virtualenv==12.0.2
+    - rm -r ~/.gradle
 
 test:
   override:
