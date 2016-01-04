@@ -6,6 +6,7 @@ import logging
 import os
 from xml.dom import minidom
 import requests
+from math import floor
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
@@ -61,7 +62,7 @@ def parse_report_file(report_file):
 
     # Convert decimal string to floored int percent value
     def percent(s):
-        return float(s) * 100
+        return int(floor(float(s) * 100))
 
     # Parse the XML into the format expected by the API
     report_xml = minidom.parse(report_file)
