@@ -108,8 +108,11 @@ def upload_report(report, token, commit):
     logging.debug(r.content)
     r.raise_for_status()
 
-    message = json.loads(r.text)['success']
-    logging.info(message)
+    response = json.loads(r.text)
+    try:
+        logging.info(response['success'])
+    except KeyError:
+        logging.error(response['error'])
 
 
 def run():
