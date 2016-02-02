@@ -7,7 +7,7 @@
         "1": 1,
         "4": 1
       },
-      "filename": "src/codacy/__init__.py"
+      "filename": "__init__.py"
     },
     {
       "total": 49,
@@ -42,7 +42,7 @@
         "34": 1,
         "57": 1
       },
-      "filename": "src/codacy/reporter.py"
+      "filename": "reporter.py"
     }
   ],
   "language": "python"

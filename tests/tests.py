@@ -1,9 +1,20 @@
-import unittest
-import codacy.reporter
+
 import json
+import os
+import unittest
+
+import codacy.reporter
+
+
+HERE = os.path.abspath(os.path.dirname(__file__))
+
+
+def _file_location(*args):
+    return os.path.join(HERE, *args)
 
 
 class ReporterTests(unittest.TestCase):
+
     def compare_parse_result(self, generated_filename, expected_filename):
         def file_get_contents(filename):
             with open(filename) as f:
@@ -19,17 +30,20 @@ class ReporterTests(unittest.TestCase):
     def test_parser_coverage3(self):
         self.maxDiff = None
 
-        self.compare_parse_result('tests/coverage3/cobertura.xml', 'tests/coverage3/coverage.json')
+        self.compare_parse_result(_file_location('coverage3', 'cobertura.xml'),
+                                  _file_location('coverage3', 'coverage.json'))
 
     def test_parser_coverage4(self):
         self.maxDiff = None
 
-        self.compare_parse_result('tests/coverage4/cobertura.xml', 'tests/coverage4/coverage.json')
+        self.compare_parse_result(_file_location('coverage4', 'cobertura.xml'),
+                                  _file_location('coverage4', 'coverage.json'))
 
     def test_parser_git_filepath(self):
         self.maxDiff = None
 
-        self.compare_parse_result('tests/filepath/cobertura.xml', 'tests/filepath/coverage.json')
+        self.compare_parse_result(_file_location('filepath', 'cobertura.xml.tpl'),
+                                  _file_location('filepath', 'coverage.json'))
 
 
 if __name__ == '__main__':

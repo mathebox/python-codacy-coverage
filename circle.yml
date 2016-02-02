@@ -12,6 +12,12 @@ dependencies:
 
 test:
   override:
-    - make test-all
-    - make install
-    - make coverage
+    - tox -e py27,py350,pep8,pyflakes,coverage
+    - python setup.py develop
+
+deployment:
+  coverage:
+    branch: master
+    commands:
+      - tox -e upload_coverage
+
