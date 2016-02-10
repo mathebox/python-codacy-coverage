@@ -53,7 +53,7 @@ setup(
     packages=find_packages('src'),
     package_dir={'': 'src'}, include_package_data=True,
 
-    install_requires=['requests'],
+    install_requires=['requests>=2.9.1'],
 
     extras_require={
         'dev': ['check-manifest'],
