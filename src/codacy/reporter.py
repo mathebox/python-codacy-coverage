@@ -59,14 +59,15 @@ def file_exists(rootdir, filename):
             return False
 
 
-def generate_filename(sources, filename):
+def generate_filename(sources, filename, git_directory):
     def strip_prefix(line, prefix):
         if line.startswith(prefix):
             return line[len(prefix):]
         else:
             return line
 
-    git_directory = get_git_directory()
+    if not git_directory:
+        git_directory = get_git_directory()
 
     for source in sources:
         if file_exists(source, filename):
@@ -75,7 +76,7 @@ def generate_filename(sources, filename):
     return filename
 
 
-def parse_report_file(report_file):
+def parse_report_file(report_file, git_directory):
     """Parse XML file and POST it to the Codacy API
     :param report_file:
     """
@@ -97,7 +98,7 @@ def parse_report_file(report_file):
     classes = report_xml.getElementsByTagName('class')
     for cls in classes:
         file_report = {
-            'filename': generate_filename(sources, cls.attributes['filename'].value),
+            'filename': generate_filename(sources, cls.attributes['filename'].value, git_directory),
             'total': percent(cls.attributes['line-rate'].value),
             'coverage': {},
         }
@@ -141,6 +142,7 @@ def run():
     parser = argparse.ArgumentParser(description='Codacy coverage reporter for Python.')
     parser.add_argument("-r", "--report", type=str, help="coverage report file", default=DEFAULT_REPORT_FILE)
     parser.add_argument("-c", "--commit", type=str, help="git commit hash")
+    parser.add_argument("-d", "--directory", type=str, help="git top level directory")
     parser.add_argument("-v", "--verbose", help="show debug information", action="store_true")
 
     args = parser.parse_args()
@@ -160,7 +162,7 @@ def run():
         exit(1)
 
     logging.info("Parsing report file...")
-    report = parse_report_file(args.report)
+    report = parse_report_file(args.report, args.directory)
 
     logging.info("Uploading report...")
     upload_report(report, CODACY_PROJECT_TOKEN, args.commit)

@@ -20,7 +20,7 @@ class ReporterTests(unittest.TestCase):
             with open(filename) as f:
                 return f.read()
 
-        generated = codacy.reporter.parse_report_file(generated_filename)
+        generated = codacy.reporter.parse_report_file(generated_filename, '')
 
         json_content = file_get_contents(expected_filename)
         expected = json.loads(json_content)
