@@ -76,6 +76,30 @@ def generate_filename(sources, filename, git_directory):
     return filename
 
 
+def merge_reports(report_list):
+    """Merges together several report structures from parse_report_file"""
+    final_report = {
+        'language': "python",
+        'fileReports': []
+    }
+
+    for report in report_list:
+        # First, merge together detailed report structures
+        # This assumes no overlap
+        # TODO: What should we do if there is a file listed multiple times?
+        final_report['fileReports'] += report['fileReports']
+
+    # Gather all per-file coverage
+    total_coverages = []
+    for fileentry in final_report['fileReports']:
+        total_coverages += [fileentry['total']]
+
+    # And average
+    final_report['total'] = sum(total_coverages)/len(total_coverages)
+
+    return final_report
+
+
 def parse_report_file(report_file, git_directory):
     """Parse XML file and POST it to the Codacy API
     :param report_file:
@@ -140,7 +164,8 @@ def upload_report(report, token, commit):
 
 def run():
     parser = argparse.ArgumentParser(description='Codacy coverage reporter for Python.')
-    parser.add_argument("-r", "--report", type=str, help="coverage report file", default=DEFAULT_REPORT_FILE)
+    parser.add_argument("-r", "--report", type=str, help="coverage report file",
+                        default=DEFAULT_REPORT_FILE, action='append')
     parser.add_argument("-c", "--commit", type=str, help="git commit hash")
     parser.add_argument("-d", "--directory", type=str, help="git top level directory")
     parser.add_argument("-v", "--verbose", help="show debug information", action="store_true")
@@ -157,12 +182,18 @@ def run():
     if not args.commit:
         args.commit = get_git_revision_hash()
 
-    if not os.path.isfile(args.report):
-        logging.error("Coverage report " + args.report + " not found.")
-        exit(1)
+    # Explictly check ALL files before parsing any
+    for rfile in args.report:
+        if not os.path.isfile(rfile):
+            logging.error("Coverage report " + args.report + " not found.")
+            exit(1)
 
-    logging.info("Parsing report file...")
-    report = parse_report_file(args.report, args.directory)
+    reports = []
+    for rfile in args.report:
+        logging.info("Parsing report file %s...", rfile)
+        reports += parse_report_file(rfile, args.directory)
+
+    report = merge_reports(reports)
 
     logging.info("Uploading report...")
     upload_report(report, CODACY_PROJECT_TOKEN, args.commit)
