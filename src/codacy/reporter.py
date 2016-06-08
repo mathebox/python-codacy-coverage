@@ -164,8 +164,9 @@ def upload_report(report, token, commit):
 
 def run():
     parser = argparse.ArgumentParser(description='Codacy coverage reporter for Python.')
-    parser.add_argument("-r", "--report", type=str, help="coverage report file",
-                        default=DEFAULT_REPORT_FILE, action='append')
+    parser.add_argument("-r", "--report", help="coverage report file",
+                        default=[DEFAULT_REPORT_FILE], type=str,
+                        action='append')
     parser.add_argument("-c", "--commit", type=str, help="git commit hash")
     parser.add_argument("-d", "--directory", type=str, help="git top level directory")
     parser.add_argument("-v", "--verbose", help="show debug information", action="store_true")
@@ -191,7 +192,7 @@ def run():
     reports = []
     for rfile in args.report:
         logging.info("Parsing report file %s...", rfile)
-        reports += parse_report_file(rfile, args.directory)
+        reports.append(parse_report_file(rfile, args.directory))
 
     report = merge_reports(reports)
 
