@@ -15,12 +15,10 @@ def _file_location(*args):
 
 class ReporterTests(unittest.TestCase):
 
-    def compare_parse_result(self, generated_filename, expected_filename):
+    def compare_parse_result(self, generated, expected_filename):
         def file_get_contents(filename):
             with open(filename) as f:
                 return f.read()
-
-        generated = codacy.reporter.parse_report_file(generated_filename, '')
 
         json_content = file_get_contents(expected_filename)
         expected = json.loads(json_content)
@@ -30,20 +28,41 @@ class ReporterTests(unittest.TestCase):
     def test_parser_coverage3(self):
         self.maxDiff = None
 
-        self.compare_parse_result(_file_location('coverage3', 'cobertura.xml'),
+        generated = codacy.reporter.parse_report_file(
+            _file_location('coverage3', 'cobertura.xml'), '')
+        self.compare_parse_result(generated,
                                   _file_location('coverage3', 'coverage.json'))
 
     def test_parser_coverage4(self):
         self.maxDiff = None
 
-        self.compare_parse_result(_file_location('coverage4', 'cobertura.xml'),
+        generated = codacy.reporter.parse_report_file(
+            _file_location('coverage4', 'cobertura.xml'), '')
+        self.compare_parse_result(generated,
                                   _file_location('coverage4', 'coverage.json'))
 
     def test_parser_git_filepath(self):
         self.maxDiff = None
 
-        self.compare_parse_result(_file_location('filepath', 'cobertura.xml.tpl'),
+        generated = codacy.reporter.parse_report_file(
+            _file_location('filepath', 'cobertura.xml.tpl'), '')
+
+        self.compare_parse_result(generated,
                                   _file_location('filepath', 'coverage.json'))
+
+    def test_merge(self):
+        self.maxDiff = None
+        
+        generated3 = codacy.reporter.parse_report_file(
+            _file_location('coverage-merge', 'cobertura.3.xml'), '')
+        generated4 = codacy.reporter.parse_report_file(
+            _file_location('coverage-merge', 'cobertura.4.xml'), '')
+
+        result = codacy.reporter.merge_reports([generated3, generated4])
+
+        self.compare_parse_result(result, _file_location('coverage-merge', 'coverage-merge.json'))
+		
+
 
 
 if __name__ == '__main__':
