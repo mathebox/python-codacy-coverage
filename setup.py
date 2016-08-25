@@ -11,7 +11,7 @@ with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 # Default version
-__version__ = '1.2.18'
+__version__ = '1.3.0'
 
 # Get the correct version from file
 try:
