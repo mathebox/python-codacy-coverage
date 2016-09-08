@@ -95,7 +95,7 @@ def merge_reports(report_list):
         total_coverages += [fileentry['total']]
 
     # And average
-    final_report['total'] = sum(total_coverages)/len(total_coverages)
+    final_report['total'] = int(sum(total_coverages)/len(total_coverages))
 
     return final_report
 
