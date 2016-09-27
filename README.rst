@@ -41,6 +41,14 @@ Then set it in your terminal, replacing %Project_Token% with your own token:
 
 ``export CODACY_PROJECT_TOKEN=%Project_Token%``
 
+**Enterprise**
+
+To send coverage in the enterprise version you should:
+
+``export CODACY_API_BASE_URL=<Codacy_instance_URL>:16006``
+
+**Upload Coverage**
+
 Next, simply run the Codacy reporter. It will find the current commit and send all details to your project dashboard:
 
 ``python-codacy-coverage -r coverage.xml``
