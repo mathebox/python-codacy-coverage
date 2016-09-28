@@ -165,7 +165,7 @@ def upload_report(report, token, commit):
 def run():
     parser = argparse.ArgumentParser(description='Codacy coverage reporter for Python.')
     parser.add_argument("-r", "--report", help="coverage report file",
-                        default=[DEFAULT_REPORT_FILE], type=str,
+                        default=[], type=str,
                         action='append')
     parser.add_argument("-c", "--commit", type=str, help="git commit hash")
     parser.add_argument("-d", "--directory", type=str, help="git top level directory")
@@ -183,10 +183,13 @@ def run():
     if not args.commit:
         args.commit = get_git_revision_hash()
 
+    if not args.report:
+        args.report.append(DEFAULT_REPORT_FILE)
+
     # Explictly check ALL files before parsing any
     for rfile in args.report:
         if not os.path.isfile(rfile):
-            logging.error("Coverage report " + args.report + " not found.")
+            logging.error("Coverage report " + rfile + " not found.")
             exit(1)
 
     reports = []
