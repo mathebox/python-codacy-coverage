@@ -41,7 +41,7 @@ Then set it in your terminal, replacing %Project_Token% with your own token:
 
 ``export CODACY_PROJECT_TOKEN=%Project_Token%``
 
-**Enterprise**
+**Enterprise only** (Skip this step if you are using https://www.codacy.com)
 
 To send coverage in the enterprise version you should:
 
