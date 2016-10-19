@@ -54,3 +54,10 @@ Next, simply run the Codacy reporter. It will find the current commit and send a
 ``python-codacy-coverage -r coverage.xml``
 
 Note: You should keep your API token well **protected**, as it grants owner permissions to your projects.
+
+Troubleshoot
+---------------
+
+If you are using any CI that does not have .git information, you can speficy the commit with -c. For example if you are using AppVeyor you can:
+
+``python-codacy-coverage -c ${APPVEYOR_REPO_COMMIT} -r coverage.xml``
