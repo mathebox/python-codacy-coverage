@@ -58,6 +58,6 @@ Note: You should keep your API token well **protected**, as it grants owner perm
 Troubleshoot
 ---------------
 
-If you are using any CI that does not have .git information, you can specify the commit with -c. For example if you are using AppVeyor you can:
+If you are using any CI that does not have .git information, you can specify the commit with -c and the clone directory with -d. For example if you are using AppVeyor you can:
 
-``python-codacy-coverage -c ${APPVEYOR_REPO_COMMIT} -r coverage.xml``
+``python-codacy-coverage -c $APPVEYOR_REPO_COMMIT -d $APPVEYOR_BUILD_FOLDER -r coverage.xml``
