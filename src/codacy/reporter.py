@@ -52,11 +52,16 @@ def get_git_directory():
 def file_exists(rootdir, filename):
     logging.info('file_exists: %s %s' % (rootdir, filename))
     for root, subFolders, files in os.walk(rootdir):
+        logging.info('>> root: %s' % root)
+        logging.info('>> subFolders: %s' % subFolders)
+        logging.info('>> files: %s' % files)
         if filename in files:
+            logging.info('>>>> found!')
             return True
         else:
             for subFolder in subFolders:
-                return file_exists(subFolder, filename)
+                logging.info('>>>> not found! %s has %s ?' % (os.path.join(rootdir, subFolder), filename))
+                return file_exists(os.path.join(rootdir, subFolder), filename)
             return False
 
 
