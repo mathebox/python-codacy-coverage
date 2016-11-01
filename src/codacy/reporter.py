@@ -50,6 +50,7 @@ def get_git_directory():
 
 
 def file_exists(rootdir, filename):
+    logging.info('file_exists: %s %s' % (rootdir, filename))
     for root, subFolders, files in os.walk(rootdir):
         if filename in files:
             return True
